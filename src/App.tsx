@@ -1,13 +1,31 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import "./App.css";
-import useRef from "react";
+
 import "leaflet/dist/leaflet.css";
 
-import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 
 import React from "react";
 
-export const Map = (lat): JSX.Element => {
+interface MapInter {
+    lng: number;
+    lat: number;
+}
+
+interface InfoInter {
+    code: number;
+    isp: string;
+    ip: number;
+    location: {
+        timezone: number;
+        city: number;
+        country: number;
+        lat: number;
+        lng: number;
+    };
+}
+
+export const Map = (lat: MapInter): JSX.Element => {
     console.log(lat?.lng);
     console.log(lat?.lat);
 
@@ -29,21 +47,17 @@ export const Map = (lat): JSX.Element => {
 
 function App() {
     const [value, setValue] = useState<string>("");
-    const [info, setInfo] = useState<Array>();
+    const [info, setInfo] = useState<InfoInter>();
 
-    const getIpInfo = async (ip: number) => {
-        try {
-            const response = await fetch(
-                `https://geo.ipify.org/api/v2/country,city?apiKey=at_ZOf6J9cGDgFHM8b5jPe0CqRvNUULo&ipAddress=${ip}`
-            );
-            const data = await response.json();
-            setInfo(data);
+    const getIpInfo = async (ip: string) => {
+        const response = await fetch(
+            `https://geo.ipify.org/api/v2/country,city?apiKey=at_ZOf6J9cGDgFHM8b5jPe0CqRvNUULo&ipAddress=${ip}`
+        );
+        const data = await response.json();
+        setInfo(data);
 
-            if (data.code == 422) alert("there are some mistake");
-            console.log(data);
-        } catch (error) {
-            console.log(error.message);
-        }
+        if (data.code == 422) alert("there are some mistake");
+        console.log(data);
     };
 
     const handleSumbit = (e: React.FormEvent): void => {
@@ -52,14 +66,14 @@ function App() {
 
         setValue("");
     };
-    const handleChange = (e: React.FormEvent): void => {
-        setValue(e.target.value);
+    const handleChange = (e: React.FormEvent<HTMLInputElement>): void => {
+        setValue(e.currentTarget.value);
     };
 
-    useEffect(() => {
-        Map;
-        Map();
-    }, [info]);
+    // useEffect(() => {
+    //     Map;
+    //     Map();
+    // }, [info]);
     return (
         <div>
             <div className=" bg-no-repeat bg-cover relative flex justify-center flex-col bg-headBg p-10">
