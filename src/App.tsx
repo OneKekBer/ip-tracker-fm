@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import "./App.css";
+import useRef from "react";
 import "leaflet/dist/leaflet.css";
 
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
@@ -57,6 +58,7 @@ function App() {
 
     useEffect(() => {
         Map;
+        Map();
     }, [info]);
     return (
         <div>
